@@ -1,0 +1,36 @@
+Arguments: 
+  /Users/abuldauskas/.nvm/versions/node/v8.9.4/bin/node /usr/local/Cellar/yarn/1.15.2/libexec/bin/yarn.js init
+
+PATH: 
+  /Users/abuldauskas/.opam/4.03.0/bin:/Users/abuldauskas/.nvm/versions/node/v8.9.4/bin:/Users/abuldauskas/.composer/vendor/bin:/Users/abuldauskas/work/wf/:/usr/local/opt/php@7.1/bin:/Users/abuldauskas/myfastcomp/emscripten-fastcomp/build/bin:/Users/abuldauskas/binaryen/bin:/Users/abuldauskas/emscripten:/Users/abuldauskas/nonwork/depot_tools:/Users/abuldauskas/extras:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/opt/fzf/bin
+
+Yarn version: 
+  1.15.2
+
+Node version: 
+  8.9.4
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (/usr/local/Cellar/yarn/1.15.2/libexec/lib/cli.js:125801:13)
+      at emitNone (events.js:106:13)
+      at Interface.emit (events.js:208:7)
+      at Interface._ttyWrite (readline.js:775:16)
+      at ReadStream.onkeypress (readline.js:160:10)
+      at emitTwo (events.js:126:13)
+      at ReadStream.emit (events.js:214:7)
+      at emitKeys (internal/readline.js:420:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1011:36)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

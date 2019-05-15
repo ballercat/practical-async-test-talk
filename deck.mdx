@@ -1,0 +1,127 @@
+import { Appear, Image } from 'mdx-deck'
+import { Split, SplitRight } from 'mdx-deck/layouts'
+import { CodeSurfer } from 'mdx-deck-code-surfer'
+
+export { dark as theme } from 'mdx-deck/themes'
+
+# Async Testing
+_"sprinkle some time on it"_
+
+---
+
+# Tests
+
+* Quality
+* Documentation
+
+---
+
+# Async can be difficult
+
+* Time
+* Learning curve
+* Not intuitive
+
+---
+
+# Tips
+
+* The "when" and "what" are important, "how" isn't
+* Isolate the logic before testing
+* Can't Isolate? Observe the effects (the "what")
+* Use "low-tech" solutions to your advantage
+
+---
+
+<CodeSurfer
+  title="Simplify"
+  code={require('!raw-loader!./snippets/callback-refactor.js').default}
+  lang="javascript"
+  dark={false}
+  steps={[
+    { notes: "Promises are fancy, but built on top of basic primitives like callback functions" },
+    { notes: "We can take advantage of this fact to make our code more testable" },
+    { notes: "Step 1: Identify the callback function" },
+    { tokens: { 8: [6, 7, 8, 9]}, lines: [9, 10] , notes: "Here it is, how is it invoked?" },
+    { tokens: { 8: [1, 2, 3, 4, 5]}, range: [6, 7] , notes: "Through this promise chain" },
+    {
+      tokens: { 8: [1, 2, 3, 4, 5]}, range: [6, 7] ,
+      notes: "Let's see how simple primitves make existing code testable"
+    },
+  ]}
+/>
+
+---
+___
+
+<CodeSurfer
+  title="Functions all the way down"
+  code={require('!raw-loader!./snippets/callback-refactor-2.js').default}
+  lang="javascript"
+  dark={false}
+  steps={[
+    { range: [5, 7], notes: "Step 1: Wrap the service so that it uses callbacks" },
+    { range: [4, 8], notes: "Step 2: Make it a prop" },
+    { range: [12, 19], notes: "Step 3: Use the primitive callback pattern" },
+    { range: [12, 19], notes: "Now let's see why it's easier to test" },
+    { lines: [26], notes: "Simple functioins are simpler to mock" },
+    { tokens: { 27: [7, 8, 9, 10, 11, 12, 13, 14, 15] }, notes: "We can overwrite props" },
+    { lines: [28], notes: "Now when we click..." },
+    { tokens: { 26: [...Array(17).keys()].map(k => k + 8) },
+      notes: "We removed time from the equation! (without breaking the API)" },
+    { lines: [29], notes: "And the test passes" }
+  ]}
+/>
+
+---
+
+<CodeSurfer
+  title="Synchronous Data"
+  code={require('!raw-loader!./snippets/sync-example.js').default}
+  lang="javascript"
+  dark={false}
+  steps={[
+    { notes: "How does this test behave?" },
+    { lines: [31], notes: "Component mount" },
+    { range: [13, 24], notes: "Initial render" },
+    { lines: [32], notes: "Simulated event" },
+    { lines: [6], notes: "Event handler" },
+    { range: [7, 9], notes: "setState" },
+    { range: [16, 20], notes: "Render, again" },
+    { lines: [33], notes: "Assertion!" },
+    { notes: "Success!" }
+  ]}
+/>
+
+---
+
+<Image src="./resources/better-than-expected.jpg" size="500px 385px"/>
+
+---
+
+
+<CodeSurfer
+  title="Async Data"
+  code={require('!raw-loader!./snippets/async-example.js').default}
+  lang="javascript"
+  dark={false}
+  steps={[
+    { notes: "How does this test behave?" },
+    { lines: [33], notes: "Component mount" },
+    { range: [15, 26], notes: "Initial render" },
+    { lines: [34], notes: "Simulated event" },
+    { lines: [6], notes: "Event handler" },
+    { tokens: { 7: [1, 2, 3] }, notes: "Data fetch" },
+    { lines: [35], notes: "Assertion!" },
+    { notes: "The test fails here... but" },
+    { tokens: { 7: [4, 5, 6, 7, 8, 9, 10] }, notes: "The promise resolves" },
+    { range: [8, 10], notes: "setState" },
+    { range: [16, 23], notes: "Render, but no one is listening" },
+    { notes: "..." }
+  ]}
+/>
+
+---
+
+<Image src="./resources/not-like-this.png" size="500px 385px" />
+
