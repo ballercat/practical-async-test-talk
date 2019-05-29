@@ -25,7 +25,7 @@ class SampleList extends Component {
 
 // test.js
 test("my async widget", () => {
-  const getStuff = jest.fn((_unused, cb) => cb(["hello", "world"]));
+  const getStuff = jest.fn((options, cb) => cb([sampleOne, sampleTwo]));
   const wrapper = shallow(<SampleList getSamples={geSamples} />);
   wrapper.find(Button).simulate("click");
   expect(wrapper.find(Sample).length).toBe(4);

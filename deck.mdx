@@ -11,13 +11,6 @@ _"sprinkle some time on it"_
 
 ---
 
-# Tests
-
-- Quality
-- Documentation
-
----
-
 # Async can be difficult
 
 - Time
@@ -37,11 +30,19 @@ _"sprinkle some time on it"_
 
 # Common mistakes
 
-- Not returning promises
+- Not returning promises, from tests or actions etc.
 - Conditional expectations
 - Missing `expect.assertions`
 - Random timeouts
 - Code generated tests
+
+---
+
+# Avoiding mistakes
+
+- Use `npm run test-strict` during development
+- It'll catch tests without assertions and broken promises
+- ESLint
 
 ---
 
@@ -150,6 +151,16 @@ _"sprinkle some time on it"_
 
 ---
 
+# Use the spec to your advantage
+
+- When mocking network is prefered
+- Isolated (unit) tests
+- TDD
+- The fetch logic is simple and not likely to change
+- Pretty much always improtant
+
+---
+
 <CodeSurfer
   title="Practical application of the spec"
   code={require("!raw-loader!./snippets/use-the-spec.js").default}
@@ -161,37 +172,67 @@ _"sprinkle some time on it"_
         "Here is how this knowledge of the Promise spec can be applied in a test"
     },
     {
-      lines: [35]
+      range: [3, 31],
+      notes:
+        "Here's our component, it renders samples and allows the user to see more"
     },
     {
-      range: [17, 28]
+      range: [3, 31],
+      notes: "Let's exercise our new knowledge to test this logic onClick logic"
     },
     {
-      lines: [36]
+      lines: [35],
+      notes: "Initial mount in a test, leads to..."
     },
     {
-      lines: [9]
+      range: [17, 28],
+      notes: "A render without sample data"
     },
     {
-      lines: [38]
+      lines: [36],
+      tokens: {
+        26: [5, 6, 7]
+      },
+      notes: "We simulate the click event"
     },
     {
-      range: [10, 12]
+      tokens: { 9: range(4, 1) },
+      notes: "Which proceeds to create a promise(resolved)"
     },
     {
-      lines: [39]
+      tokens: {
+        9: range(7, 5)
+      },
+      notes: "Which allows us to SCHEDULE a promise callback via .then"
+    },
+    {
+      tokens: {
+        38: range(8, 1)
+      },
+      notes: "We can then manually SCHEDULE another promise callback"
+    },
+    {
+      range: [10, 12],
+      notes: "According to the spec, the first scheduled callback runs first"
+    },
+    {
+      lines: [39],
+      notes: "According to the spec, the last shceduled callback runs last"
+    },
+    {
+      lines: [39],
+      notes: "The test passes"
     }
   ]}
 />
 
 ---
 
-# Useful when
+# Taking control of the time itself
 
-- When mocking network is prefered
-- Isolated (unit) tests
 - TDD
-- The fetch logic is simple and not likely to change
+- When promise chains are complex (multiple chained .thens)
+- componentDidMount() & enzyme issues
 
 ---
 
@@ -222,7 +263,12 @@ _"sprinkle some time on it"_
     {
       tokens: { 8: [1, 2, 3, 4, 5] },
       range: [6, 7],
-      notes: "Let's see how simple primitves make existing code testable"
+      notes: "What if we removed time from the equation entirely?"
+    },
+    {
+      tokens: { 8: [1, 2, 3, 4, 5] },
+      range: [6, 7],
+      notes: "We need a way to override this logic"
     }
   ]}
 />
@@ -235,11 +281,11 @@ _"sprinkle some time on it"_
   lang="javascript"
   dark={false}
   steps={[
+    { range: [4, 8], notes: "Step 1: Make it a prop" },
     {
-      range: [5, 7],
-      notes: "Step 1: Wrap the service so that it uses callbacks"
+      range: [4, 8],
+      notes: "Step 2: Wrap the service so that it uses callbacks"
     },
-    { range: [4, 8], notes: "Step 2: Make it a prop" },
     { range: [12, 19], notes: "Step 3: Use the primitive callback pattern" },
     { range: [12, 19], notes: "Now let's see why it's easier to test" },
     { lines: [28], notes: "Simple functioins are simpler to mock" },
@@ -248,6 +294,7 @@ _"sprinkle some time on it"_
       notes: "We can overwrite props"
     },
     { lines: [30], notes: "Now when we click..." },
+    { lines: [11, 12], notes: "Click handler runs and invokes our mock prop" },
     {
       tokens: { 28: [...Array(17).keys()].map(k => k + 8) },
       notes: "We removed time from the equation! (without breaking the API)"
@@ -262,12 +309,11 @@ _"sprinkle some time on it"_
 
 ---
 
-# When callbacks are helpful
+# Simplifying redux test
 
-- When promise chains are complex
-- componentDidMount() & enzyme
+- The component can be accessed directly
+- When you have access to the redux store/actions/reducers
 - TDD
-- Always?
 
 ---
 
@@ -278,6 +324,9 @@ _"sprinkle some time on it"_
   dark={false}
   steps={[
     { notes: "Here is a classic redux example with async actions" },
+    { range: [1, 14], notes: "Our component is now purely functional" },
+    { range: [16, 19], notes: "With a traditional connect setup" },
+    { range: [23, 27], notes: "Which uses a thunk for getSamples call now" },
     { notes: "Let's see how we can simplify this to and test the logic" }
   ]}
 />
@@ -307,19 +356,16 @@ _"sprinkle some time on it"_
       notes: "Which should update the store, which we will assert."
     },
     {
-      range: [37, 42],
+      range: [37, 41],
       notes: "Now we can render the component with an already updated store."
     },
     {
-      lines: [16],
-      notes: "We can override the default handler because of mapStateToProps."
+      range: [37, 41],
+      notes:
+        "Note that the store is already updated, all we need is the render output"
     },
     {
-      range: [44, 45],
-      notes: "We will also assert that click callback is called correctly"
-    },
-    {
-      lines: [46],
+      lines: [43],
       notes: "Finally, we assert that the component rendered correctly"
     }
   ]}
@@ -327,11 +373,12 @@ _"sprinkle some time on it"_
 
 ---
 
-# Simplify redux apps when
+# Redux ledger
 
-- The component can be accessed directly
-- When you have access to the redux store/actions/reducers
-- TDD
+- All async logic is powered via redux
+- Actions cause other async actions and so on (cascade)
+- Difficult to reason about flow
+- More info at githug.com/wayfair/redux-ledger
 
 ---
 
@@ -391,14 +438,6 @@ _"sprinkle some time on it"_
 
 ---
 
-# Redux ledger is useful when
-
-- All async logic is powered via redux
-- Actions cause other async actions and so on
-- More info at githug.com/wayfair/redux-ledger
-
----
-
 # When all else fails...
 
 - You got a mess of code to deal with
@@ -414,13 +453,6 @@ _"sprinkle some time on it"_
   lang="javascript"
   dark={false}
 />
-
----
-
-# Avoiding mistakes
-
-- Use `npm run test-strict` during development
-- It'll catch tests without assertions and broken promises
 
 ---
 

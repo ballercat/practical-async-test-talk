@@ -34,15 +34,12 @@ test("samples are populated after click", () => {
 
     expect(store.getState().samples.length).toBe(4);
 
-    const onClickMock = jest.fn();
     const wrapper = mount(
       <Provider store={store}>
         <SampleList onClick={onClickMock} />
       </Provider>
     );
 
-    wrapper.find(Button).simulate('click');
-    expect(onClickMock).toHaveBeenCalled();
     expect(wrapper.find(Sample).length).toBe(4);
   });
 });

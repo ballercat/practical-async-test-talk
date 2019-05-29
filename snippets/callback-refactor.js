@@ -1,12 +1,12 @@
-import { getStuff } from "service";
+import { getSamples } from "service";
 
 class App extends Component {
-  // Get some stuff from our async service and re-render when done
+  // Get some samples from our async service and re-render when done
   onClick = () =>
-    getStuff({
-      /* options */
+    getSamples({
+      /* this call is mocked */
     }).then(response => {
-      this.setState({ results: response });
+      this.setState({ samples: response });
     });
 
   render() {
