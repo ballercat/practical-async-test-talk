@@ -30,8 +30,9 @@ _"sprinkle some time on it"_
 
 - Not returning promises
 - Conditional expectations
-- No expectations
+- Missing `expect.assertions`
 - Random timeouts
+- Code generated tests
 
 ---
 
@@ -176,6 +177,15 @@ _"sprinkle some time on it"_
 
 ---
 
+# Useful when
+
+- When mocking network is prefered
+- Isolated (unit) tests
+- TDD
+- The fetch logic is simple and not likely to change
+
+---
+
 <CodeSurfer
   title="Controling time"
   code={require("!raw-loader!./snippets/callback-refactor.js").default}
@@ -308,10 +318,10 @@ _"sprinkle some time on it"_
 
 ---
 
-# When is simplifying useful
+# Simplify redux apps when
 
-- Access to the component
-- When you have access to the redux actions
+- The component can be accessed directly
+- When you have access to the redux store/actions/reducers
 - TDD
 
 ---
