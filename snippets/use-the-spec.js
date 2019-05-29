@@ -6,7 +6,7 @@ class SampleList extends Component {
   };
 
   onClick = () => {
-    getSamples().then(samples => {
+    getSamples(/* this call is mocked */).then(samples => {
       this.setState({
         samples
       });

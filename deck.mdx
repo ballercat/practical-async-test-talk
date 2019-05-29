@@ -26,9 +26,18 @@ _"sprinkle some time on it"_
 
 ---
 
+# Common mistakes
+
+- Not returning promises
+- Conditional expectations
+- No expectations
+- Random timeouts
+
+---
+
 # Dealing with time
 
-- Know the rules
+- What is async? Understand the rules
 - Control
 - Simplify
 - Observe
@@ -214,71 +223,186 @@ _"sprinkle some time on it"_
     { range: [4, 8], notes: "Step 2: Make it a prop" },
     { range: [12, 19], notes: "Step 3: Use the primitive callback pattern" },
     { range: [12, 19], notes: "Now let's see why it's easier to test" },
-    { lines: [26], notes: "Simple functioins are simpler to mock" },
+    { lines: [28], notes: "Simple functioins are simpler to mock" },
     {
-      tokens: { 27: [7, 8, 9, 10, 11, 12, 13, 14, 15] },
+      tokens: { 29: [7, 8, 9, 10, 11, 12, 13, 14, 15] },
       notes: "We can overwrite props"
     },
-    { lines: [28], notes: "Now when we click..." },
+    { lines: [30], notes: "Now when we click..." },
     {
-      tokens: { 26: [...Array(17).keys()].map(k => k + 8) },
+      tokens: { 28: [...Array(17).keys()].map(k => k + 8) },
       notes: "We removed time from the equation! (without breaking the API)"
     },
     {
       range: [16, 18],
       notes: "The callback is invoked immediately"
     },
-    { lines: [29], notes: "And the test passes" }
+    { lines: [31], notes: "And the test passes" }
+  ]}
+/>
+
+---
+
+# When callbacks are helpful
+
+- When promise chains are complex
+- componentDidMount() & enzyme
+- TDD
+- Always?
+
+---
+
+<CodeSurfer
+  title="Simplify"
+  code={require("!raw-loader!./snippets/simplify-example.js").default}
+  lang="javascript"
+  dark={false}
+  steps={[
+    { notes: "Here is a classic redux example with async actions" },
+    { notes: "Let's see how we can simplify this to and test the logic" }
   ]}
 />
 
 ---
 
 <CodeSurfer
-  title="Synchronous Data"
-  code={require("!raw-loader!./snippets/sync-example.js").default}
+  title="Split up logic to make it simpler to test"
+  code={require("!raw-loader!./snippets/simplify-example-2.js").default}
   lang="javascript"
   dark={false}
   steps={[
-    { notes: "How does this test behave?" },
-    { lines: [31], notes: "Component mount" },
-    { range: [13, 24], notes: "Initial render" },
-    { lines: [32], notes: "Simulated event" },
-    { lines: [6], notes: "Event handler" },
-    { range: [7, 9], notes: "setState" },
-    { range: [16, 20], notes: "Render, again" },
-    { lines: [33], notes: "Assertion!" },
-    { notes: "Success!" }
+    { notes: "Redux allows us to split our async logic into discrete steps" },
+    {
+      notes:
+        "We can, for example run our actions BEFORE rendering the component"
+    },
+    { lines: [32], notes: "We begin by creating the stand-alone redux store" },
+    { lines: [33], notes: "Then we dispatch the action by itself" },
+    {
+      lines: [24],
+      notes: "Notice that we are returning the promise inside the action"
+    },
+    { lines: [25], notes: "The action completes and dispatches an action" },
+    {
+      lines: [35],
+      notes: "Which should update the store, which we will assert."
+    },
+    {
+      range: [37, 42],
+      notes: "Now we can render the component with an already updated store."
+    },
+    {
+      lines: [16],
+      notes: "We can override the default handler because of mapStateToProps."
+    },
+    {
+      range: [44, 45],
+      notes: "We will also assert that click callback is called correctly"
+    },
+    {
+      lines: [46],
+      notes: "Finally, we assert that the component rendered correctly"
+    }
   ]}
 />
 
 ---
 
-<Image src="./resources/better-than-expected.jpg" size="500px 385px" />
+# When is simplifying useful
+
+- Access to the component
+- When you have access to the redux actions
+- TDD
 
 ---
 
 <CodeSurfer
-  title="Async Data"
-  code={require("!raw-loader!./snippets/async-example.js").default}
+  title="Redux actions ledger"
+  code={require("!raw-loader!./snippets/redux-ledger.js").default}
   lang="javascript"
   dark={false}
   steps={[
-    { notes: "How does this test behave?" },
-    { lines: [33], notes: "Component mount" },
-    { range: [15, 26], notes: "Initial render" },
-    { lines: [34], notes: "Simulated event" },
-    { lines: [6], notes: "Event handler" },
-    { tokens: { 7: [1, 2, 3] }, notes: "Data fetch" },
-    { lines: [35], notes: "Assertion!" },
-    { notes: "The test fails here... but" },
-    { tokens: { 7: [4, 5, 6, 7, 8, 9, 10] }, notes: "The promise resolves" },
-    { range: [8, 10], notes: "setState" },
-    { range: [16, 23], notes: "Render, but no one is listening" },
-    { notes: "..." }
+    {
+      notes:
+        "When the behavior of the redux app is complex you might want to try an alternative approach"
+    },
+    {
+      notes:
+        "This is when you may OBSERVE the behavior of the redux app from the outside, with redux-ledger"
+    },
+    {
+      lines: [32],
+      notes: "Ledger is a midddleware which keeps track of all async actions"
+    },
+    {
+      lines: [32, 33],
+      notes:
+        "You create the middleware in a test and inject it into the store, like so"
+    },
+    {
+      range: [35, 39],
+      notes: "You then use the store as you would before when mounting your app"
+    },
+    {
+      lines: [41],
+      notes:
+        "We can then proceed to simulate the click handler and let the actions play out"
+    },
+    {
+      lines: [23, 24, 43],
+      notes:
+        "Ledger middleware will allow you to wait for all the actions to complete"
+    },
+    {
+      lines: [25],
+      notes: "Ledger will not resolve until ALL actions are dispatched"
+    },
+    {
+      lines: [23, 24, 43],
+      notes:
+        "Note that we are returning the promise in our action as before, this is important"
+    },
+    {
+      lines: [44, 45],
+      notes:
+        "When the actions are complete, we can then proceed to run our assertions"
+    }
   ]}
 />
 
 ---
 
-<Image src="./resources/not-like-this.png" size="500px 385px" />
+# Redux ledger is useful when
+
+- All async logic is powered via redux
+- Actions cause other async actions and so on
+- More info at githug.com/wayfair/redux-ledger
+
+---
+
+# When all else fails...
+
+- You got a mess of code to deal with
+- The logic is impossible to shim (Apollo)
+- The logic is brittle and you need coverage to refactor
+- Maybe you simply want to sanity check your initial approach?
+
+---
+
+<CodeSurfer
+  title="Wait for expectations"
+  code={require("!raw-loader!./snippets/apollo-example.js").default}
+  lang="javascript"
+  dark={false}
+/>
+
+---
+
+# Avoiding mistakes
+
+- Use `npm run test-strict` during development
+- It'll catch tests without assertions and broken promises
+
+---
+
+# FIN

@@ -1,30 +1,32 @@
-import { getStuff } from "service";
+import { getSamples } from "service";
 
-class App extends Component {
+class SampleList extends Component {
   defaultProps = {
-    getStuff(options, cb) {
-      getStuff(options).then(cb);
+    getSamples(options, cb) {
+      getSamples(options).then(cb);
     }
   };
 
   // Get some stuff from our async service and re-render when done
   onClick = () =>
-    this.props.getStuff(
+    this.props.getSamples(
       {
         /* options */
       },
-      response => {
-        this.setState({ results: response });
+      samples => {
+        this.setState({ samples });
       }
     );
 
-  // ... render here etc
+  render() {
+    /* render samples here */
+  }
 }
 
-// test
+// test.js
 test("my async widget", () => {
   const getStuff = jest.fn((_unused, cb) => cb(["hello", "world"]));
-  const wrapper = shallow(<App getStuff={getStuff} />);
+  const wrapper = shallow(<SampleList getSamples={geSamples} />);
   wrapper.find(Button).simulate("click");
-  expect(wrapper.find(Result).length).toBe(2);
+  expect(wrapper.find(Sample).length).toBe(4);
 });

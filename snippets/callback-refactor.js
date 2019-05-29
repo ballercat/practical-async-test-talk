@@ -9,5 +9,7 @@ class App extends Component {
       this.setState({ results: response });
     });
 
-  // ... render here etc
+  render() {
+    /* render samples here */
+  }
 }
