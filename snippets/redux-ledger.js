@@ -34,7 +34,7 @@ test("samples are populated after click", () => {
 
   const wrapper = mount(
     <Provider store={store}>
-      <SampleList onClick={onClickMock} />
+      <SampleList />
     </Provider>
   );
 
