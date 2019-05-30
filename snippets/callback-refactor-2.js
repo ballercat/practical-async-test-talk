@@ -28,5 +28,5 @@ test("my async widget", () => {
   const getStuff = jest.fn((options, cb) => cb([sampleOne, sampleTwo]));
   const wrapper = shallow(<SampleList getSamples={geSamples} />);
   wrapper.find(Button).simulate("click");
-  expect(wrapper.find(Sample).length).toBe(4);
+  expect(wrapper.find(Sample).length).toBe(2);
 });
