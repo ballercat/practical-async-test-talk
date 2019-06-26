@@ -3,7 +3,7 @@ import { Split, SplitRight } from "mdx-deck/layouts";
 import { CodeSurfer } from "mdx-deck-code-surfer";
 import { range } from "./helpers";
 
-export { dark as theme } from "mdx-deck/themes";
+export { swiss as theme } from "mdx-deck/themes";
 
 # Async Testing
 
@@ -115,20 +115,12 @@ _"sprinkle some time on it"_
       notes: "The first callback executes, settling the promise"
     },
     {
-      lines: [5],
-      notes: "Next callback is QUEUED"
-    },
-    {
       tokens: { 6: range(12, 12) },
-      notes: "Second callback is executed"
+      notes: "The second scheduled callback is executed"
     },
     {
       tokens: { 5: range(10, 4) },
       notes: "Third callback executes, settling 'p1'"
-    },
-    {
-      tokens: { 7: range(14, 5) },
-      notes: "Callback attached to p1 can now be SCHEDULED"
     },
     {
       tokens: { 7: range(10, 8) },
